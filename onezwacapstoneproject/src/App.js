@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './pages/Layout.jsx';
+import Home from './pages/Home.jsx';
+import Login from './pages/Login.jsx';
+import Show from './pages/Show.jsx';
+import Favorites from './pages/Favorites.jsx';
 
 function App() {
+  const [state, setState] = React.useState({
+    isPlaying: false,
+    episode: {},
+  });
+
+  function playEp(episode) {
+    setState((prev) => {
+      return {
+        ...prev,
+        episode: episode,
+        isPlaying: true,
+      };
+    });
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout state={state} />}>
+          <Route index element={<Home />} />
+          <Route path="show/:id" element={<Show playEpHandler={playEp} />} />
+          <Route path="login" element={<Login />} />
+          <Route path="favorites" element={<Favorites />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
